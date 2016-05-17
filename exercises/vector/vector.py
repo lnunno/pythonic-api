@@ -4,8 +4,8 @@ A multi-dimensional ``Vector`` class
 
 from array import array
 import math
-import reprlib
 import numbers
+import repr
 
 
 class Vector:
@@ -31,7 +31,7 @@ class Vector:
         return str(tuple(self))
 
     def __repr__(self):
-        components = reprlib.repr(self._components)
+        components = repr.repr(self._components)
         components = components[components.find('['):-1]
         return 'Vector({})'.format(components)
 
@@ -55,3 +55,18 @@ class Vector:
         return self * scalar
 
     # exercise solutions below...
+
+    def __add__(self, v):
+        if isinstance(v, numbers.Real):
+            return NotImplemented
+        elif len(v) != len(self):
+            raise ValueError('Mismatched lengths for add.')
+        else:
+            return Vector(a+b for a,b in zip(self, v))
+
+    def __radd__(self, v):
+        return self + v
+
+    def __neg__(self):
+        c_neg = [-a for a in self._components]
+        return Vector(c_neg)
